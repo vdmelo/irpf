@@ -1,0 +1,172 @@
+# https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html#common-application-properties
+spring:
+  application:
+    name: vdm-finance
+
+  output:
+    ansi:
+      enabled: DETECT
+
+  jackson:
+    time-zone: UTC
+    default-property-inclusion: non-null
+    mapper:
+      accept-case-insensitive-properties: true
+
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    out-of-order: true
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/vdm-finance
+    username: postgres
+    password: xyzw1234
+    hikari:
+      max-lifetime: 300000
+      maximum-pool-size: 18
+      poolName: ${spring.application.name}-default-pool
+      auto-commit: false
+      data-source-properties:
+        cachePrepStmts: true
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQL10Dialect
+    open-in-view: false
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+      naming:
+        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+    properties:
+      # org.hibernate.cfg.AvailableSettings
+      hibernate:
+        types:
+          print:
+            banner: false
+        cache:
+          '[use_second_level_cache]': false
+        connection:
+          '[provider_disables_autocommit]': true
+        jdbc:
+          '[batch_size]': 30
+          '[batch_versioned_data]': true
+          '[time_zone]': UTC
+        '[order_inserts]': true
+        '[order_updates]': true
+        query:
+          '[in_clause_parameter_padding]': true
+          '[fail_on_pagination_over_collection_fetch]': true
+        session:
+          events:
+            log:
+              '[LOG_QUERIES_SLOWER_THAN_MS]': 150
+
+  data:
+    jpa:
+      repositories:
+        bootstrap-mode: lazy
+
+server:
+  servlet:
+    context-path: /finance
+  compression:
+    enabled: true
+
+
+springfox:
+  info:
+    title: "VDM Finance"
+    description: "Restful APIs do serviços VDM Finance."
+
+  documentation:
+    swagger:
+      v2:
+        enabled: false
+
+---
+# Development settings
+spring:
+
+  config:
+    activate:
+      on-profile: dev
+
+  flyway:
+    schemas:
+      - public
+
+  jpa:
+    properties:
+      hibernate:
+        '[generate_statistics]': false
+
+logging:
+  level:
+    '[supply.agro]': TRACE
+    '[org.hibernate.SQL]': TRACE
+    '[org.hibernate.type]': TRACE
+    '[com.zaxxer.hikari.HikariConfig]': TRACE
+    '[org.hibernate.SQL_SLOW]': INFO
+    '[com.azure]': DEBUG
+
+---
+# Integration test settings
+spring:
+  config:
+    activate:
+      on-profile: it
+
+  jmx:
+    enabled: false
+
+  flyway:
+    schemas:
+      - it
+
+  jpa:
+    properties:
+      hibernate:
+        '[default_schema]': it
+
+
+supply:
+  database:
+    schema:
+      naming-strategy: as-is
+      ignored:
+        - public
+
+logging:
+  level:
+    '[supply.agro]': TRACE
+    '[org.hibernate.SQL]': DEBUG
+    '[org.hibernate.type]': TRACE
+    '[com.zaxxer.hikari.HikariConfig]': DEBUG
+    '[org.hibernate.SQL_SLOW]': INFO
+
+---
+# Production settings
+spring:
+
+  config:
+    activate:
+      on-profile: prod
+
+  main:
+    banner-mode: off
+
+  jmx:
+    enabled: false
+
+logging:
+  level:
+    root: WARN
+    '[supply.agro]': INFO
+    '[org.hibernate.SQL_SLOW]': INFO
+    '[org.springframework.web.filter.CommonsRequestLoggingFilter]': DEBUG
+    '[supply.agro.negociacao.domain.base.adapter.in.api.CotacaoController]': TRACE
+  pattern:
+    level: '[user:%X{user}] [tenant:%X{tenantId}] %5p'
