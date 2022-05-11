@@ -105,7 +105,7 @@ spring:
 
 logging:
   level:
-    '[supply.agro]': TRACE
+    '[br.com.batmelo]': TRACE
     '[org.hibernate.SQL]': TRACE
     '[org.hibernate.type]': TRACE
     '[com.zaxxer.hikari.HikariConfig]': TRACE
@@ -141,7 +141,7 @@ supply:
 
 logging:
   level:
-    '[supply.agro]': TRACE
+    '[br.com.batmelo]': TRACE
     '[org.hibernate.SQL]': DEBUG
     '[org.hibernate.type]': TRACE
     '[com.zaxxer.hikari.HikariConfig]': DEBUG
@@ -164,9 +164,8 @@ spring:
 logging:
   level:
     root: WARN
-    '[supply.agro]': INFO
+    '[br.com.batmelo]': INFO
     '[org.hibernate.SQL_SLOW]': INFO
     '[org.springframework.web.filter.CommonsRequestLoggingFilter]': DEBUG
-    '[supply.agro.negociacao.domain.base.adapter.in.api.CotacaoController]': TRACE
   pattern:
     level: '[user:%X{user}] [tenant:%X{tenantId}] %5p'

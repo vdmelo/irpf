@@ -1,15 +1,14 @@
-package br.com.batmelo.finance.importacao.domain.negociacao.app;
+package br.com.batmelo.finance.importacao.domain.transacoes.app;
 
 import br.com.batmelo.finance.importacao.domain.ativo.model.Ativo;
 import br.com.batmelo.finance.importacao.domain.ativo.model.TipoAtivo;
 import br.com.batmelo.finance.importacao.domain.ativo.repository.AtivoRepository;
 import br.com.batmelo.finance.importacao.domain.instituicao.model.Instituicao;
 import br.com.batmelo.finance.importacao.domain.instituicao.repository.InstituicaoRepository;
-import br.com.batmelo.finance.importacao.domain.negociacao.model.Negociacao;
-import br.com.batmelo.finance.importacao.domain.negociacao.model.TipoOperacaoFinanceira;
-import br.com.batmelo.finance.importacao.domain.negociacao.repository.NegociacaoRepository;
+import br.com.batmelo.finance.importacao.domain.transacoes.model.Transacao;
+import br.com.batmelo.finance.importacao.domain.transacoes.model.TipoOperacaoFinanceira;
+import br.com.batmelo.finance.importacao.domain.transacoes.repository.TransacaoRepository;
 import lombok.RequiredArgsConstructor;
-import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.ss.usermodel.*;
 import org.springframework.stereotype.Service;
 
@@ -17,15 +16,11 @@ import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-
-import static java.util.Objects.requireNonNullElse;
 
 @RequiredArgsConstructor
 
@@ -33,18 +28,18 @@ import static java.util.Objects.requireNonNullElse;
 @Transactional
 public class ImportaTransacoesStatusInvest {
 
-    private final NegociacaoRepository negociacaoRepository;
+    private final TransacaoRepository transacaoRepository;
     private final AtivoRepository ativoRepository;
     private final InstituicaoRepository instituicaoRepository;
 
     public void importar(File arquivo) throws ParseException, IOException {
-        List<Negociacao> negociacoes = carregaNegociacoesDoArquivoStatusInvest(arquivo);
-        negociacaoRepository.saveAll(negociacoes);
+        List<Transacao> transacoes = carregaTransacoesDoArquivoStatusInvest(arquivo);
+        transacaoRepository.saveAll(transacoes);
 
     }
 
-    private List<Negociacao> carregaNegociacoesDoArquivoStatusInvest(File arquivo) throws ParseException, IOException {
-        List<Negociacao> negociacoes = new ArrayList<>();
+    private List<Transacao> carregaTransacoesDoArquivoStatusInvest(File arquivo) throws ParseException, IOException {
+        List<Transacao> transacoes = new ArrayList<>();
 
         Workbook workbook = WorkbookFactory.create(arquivo);
         if (workbook.getNumberOfSheets() > 0) {
@@ -56,18 +51,18 @@ public class ImportaTransacoesStatusInvest {
 
             while (rowIterator.hasNext()) {
                 Row row = rowIterator.next();
-                negociacoes.add(converteLinhaParaNegociacao(row));
+                transacoes.add(converteLinhaParaTransacao(row));
             }
         }
-        return negociacoes;
+        return transacoes;
     }
 
-    private Negociacao converteLinhaParaNegociacao(Row row) throws ParseException {
+    private Transacao converteLinhaParaTransacao(Row row) throws ParseException {
 
         Ativo ativo = obterAtivo(row.getCell(1).getStringCellValue(), row.getCell(2).getStringCellValue());
         Instituicao instituicao = obterInstituicao(row.getCell(6).getStringCellValue());
 
-        return Negociacao.builder()
+        return Transacao.builder()
                 .data(strToLocalDate(row.getCell(0).getStringCellValue()))
                 .ativo(ativo.getId())
                 .tipo(converteTipoOperacaoFinanceira(row.getCell(3).getStringCellValue()))

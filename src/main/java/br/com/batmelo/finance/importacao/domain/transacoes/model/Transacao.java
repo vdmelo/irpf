@@ -1,12 +1,9 @@
-package br.com.batmelo.finance.importacao.domain.negociacao.model;
+package br.com.batmelo.finance.importacao.domain.transacoes.model;
 
-import br.com.batmelo.finance.importacao.domain.ativo.model.Ativo;
-import br.com.batmelo.finance.importacao.domain.instituicao.model.Instituicao;
-import br.com.batmelo.finance.importacao.domain.usuario.model.Usuario;
 import br.com.batmelo.finance.infra.model.GenericEntityImpl;
 import br.com.batmelo.finance.sk.identifiers.AtivoId;
 import br.com.batmelo.finance.sk.identifiers.InstituicaoId;
-import br.com.batmelo.finance.sk.identifiers.NegociacaoId;
+import br.com.batmelo.finance.sk.identifiers.TransacaoId;
 import br.com.batmelo.finance.sk.identifiers.UsuarioId;
 import lombok.*;
 
@@ -18,10 +15,10 @@ import java.time.LocalDate;
 @NoArgsConstructor
 
 @Entity
-public class Negociacao extends GenericEntityImpl<NegociacaoId> {
+public class Transacao extends GenericEntityImpl<TransacaoId> {
 
     @Id
-    private NegociacaoId id;
+    private TransacaoId id;
 
     @Column(name = "usuario_id")
     private UsuarioId usuario;
@@ -54,7 +51,7 @@ public class Negociacao extends GenericEntityImpl<NegociacaoId> {
     @Column(name = "preco", precision = 8, scale = 2)
     private BigDecimal preco;
 
-    public Negociacao(NegociacaoBuilder builder) {
+    public Transacao(TransacaoBuilder builder) {
         this.prazo = builder.prazo;
         this.preco = builder.preco;
         this.tipo = builder.tipo;
@@ -68,7 +65,7 @@ public class Negociacao extends GenericEntityImpl<NegociacaoId> {
         this.usuario = builder.usuario;
     }
 
-    public static NegociacaoBuilder builder() {
-        return new NegociacaoBuilder();
+    public static TransacaoBuilder builder() {
+        return new TransacaoBuilder();
     }
 }

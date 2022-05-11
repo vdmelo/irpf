@@ -25,7 +25,7 @@ public abstract class GenericEntityImpl<I> implements GenericEntity<I> {
 
     @JsonIgnore
     @CreationTimestamp
-    @Column(name = "created_at")
+    @Column(name = "created_at", updatable = false)
     private LocalDateTime entityCreatedAt;
 
     @JsonIgnore

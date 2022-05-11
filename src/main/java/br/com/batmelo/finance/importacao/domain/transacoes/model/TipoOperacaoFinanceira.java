@@ -1,12 +1,15 @@
-package br.com.batmelo.finance.importacao.domain.negociacao.model;
-
-import br.com.batmelo.finance.sk.identifiers.NegociacaoId;
-
-import java.util.function.Function;
+package br.com.batmelo.finance.importacao.domain.transacoes.model;
 
 public enum TipoOperacaoFinanceira {
     COMPRA,
     VENDA;
+
+    public TipoOperacaoFinanceira inverso() {
+        if( this == COMPRA ) {
+            return VENDA;
+        }
+        return COMPRA;
+    }
 
     public static class TipoOperacaoFinanceiraInvalidaException extends RuntimeException {
 

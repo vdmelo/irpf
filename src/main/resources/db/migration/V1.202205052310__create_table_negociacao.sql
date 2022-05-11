@@ -1,4 +1,4 @@
-CREATE TABLE negociacao
+CREATE TABLE transacao
 (
     id             UUID         NOT NULL,
     version        SMALLINT     NOT NULL DEFAULT 0,
@@ -14,14 +14,14 @@ CREATE TABLE negociacao
     ativo_id       UUID         NOT NULL,
     quantidade     NUMERIC(17,8),
     preco          NUMERIC(17,8),
-    CONSTRAINT pk_negociacao PRIMARY KEY (id)
+    CONSTRAINT pk_transacao PRIMARY KEY (id)
 );
 
-ALTER TABLE negociacao
-    ADD CONSTRAINT FK_USUARIO_DA_NEGOCIACAO FOREIGN KEY (usuario_id) REFERENCES usuario (id);
+ALTER TABLE transacao
+    ADD CONSTRAINT FK_USUARIO_DA_TRANSACAO FOREIGN KEY (usuario_id) REFERENCES usuario (id);
 
-ALTER TABLE negociacao
-    ADD CONSTRAINT FK_ATIVO_DA_NEGOCIACAO FOREIGN KEY (ativo_id) REFERENCES ativo (id);
+ALTER TABLE transacao
+    ADD CONSTRAINT FK_ATIVO_DA_TRANSACAO FOREIGN KEY (ativo_id) REFERENCES ativo (id);
 
-ALTER TABLE negociacao
-    ADD CONSTRAINT FK_INSTITUICAO_DA_NEGOCIACAO FOREIGN KEY (instituicao_id) REFERENCES instituicao (id);
+ALTER TABLE transacao
+    ADD CONSTRAINT FK_INSTITUICAO_DA_TRANSACAO FOREIGN KEY (instituicao_id) REFERENCES instituicao (id);
