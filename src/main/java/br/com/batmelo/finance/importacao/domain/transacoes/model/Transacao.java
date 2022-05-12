@@ -5,7 +5,8 @@ import br.com.batmelo.finance.sk.identifiers.AtivoId;
 import br.com.batmelo.finance.sk.identifiers.InstituicaoId;
 import br.com.batmelo.finance.sk.identifiers.TransacaoId;
 import br.com.batmelo.finance.sk.identifiers.UsuarioId;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -45,10 +46,10 @@ public class Transacao extends GenericEntityImpl<TransacaoId> {
     @Column(name = "ativo_id")
     private AtivoId ativo;
 
-    @Column(name = "quantidade")
+    @Column(name = "quantidade", precision = 20, scale = 10)
     private BigDecimal quantidade;
 
-    @Column(name = "preco", precision = 8, scale = 2)
+    @Column(name = "preco", precision = 20, scale = 10)
     private BigDecimal preco;
 
     public Transacao(TransacaoBuilder builder) {
@@ -67,5 +68,21 @@ public class Transacao extends GenericEntityImpl<TransacaoId> {
 
     public static TransacaoBuilder builder() {
         return new TransacaoBuilder();
+    }
+
+    public Operacao gerarOperacao() {
+        //OperacaoBuilder builder = this.getTipo().getOperacaoBuilder();
+        return Operacao.builder()
+                .usuario(this.getUsuario())
+                .instituicao(this.getInstituicao())
+                .ativo(this.getAtivo())
+                .data(this.getData())
+                .tipoOperacao(this.getTipo())
+                .preco(this.getPreco())
+                .quantidade(this.getQuantidade())
+                .saldo(this.getQuantidade())
+                .transacao(this.getId())
+                .tipoTrade(TipoTrade.SWING_TRADE)
+                .build();
     }
 }

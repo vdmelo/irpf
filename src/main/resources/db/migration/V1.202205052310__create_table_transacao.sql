@@ -12,8 +12,8 @@ CREATE TABLE transacao
     prazo          BIGINT,
     instituicao_id UUID         NOT NULL,
     ativo_id       UUID         NOT NULL,
-    quantidade     NUMERIC(17,8),
-    preco          NUMERIC(17,8),
+    quantidade     numeric(20, 10),
+    preco          numeric(20, 10),
     CONSTRAINT pk_transacao PRIMARY KEY (id)
 );
 

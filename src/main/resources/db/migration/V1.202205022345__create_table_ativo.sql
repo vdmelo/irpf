@@ -10,7 +10,7 @@ CREATE TABLE ativo
     setor               VARCHAR(128),
     site                VARCHAR(128),
     tipo                VARCHAR(255) NOT NULL,
-    preco               NUMERIC(17,8),
+    preco               numeric(20, 10),
     investing_url       VARCHAR(255),
     cnpj                VARCHAR(255),
     nome_fonte_pagadora VARCHAR(255),

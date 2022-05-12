@@ -121,9 +121,9 @@ public class ImportaTransacoesStatusInvest {
     private static TipoOperacaoFinanceira converteTipoOperacaoFinanceira(String str) {
         switch (str) {
             case "V":
-                return TipoOperacaoFinanceira.COMPRA;
-            case "C":
                 return TipoOperacaoFinanceira.VENDA;
+            case "C":
+                return TipoOperacaoFinanceira.COMPRA;
             default:
                 throw new TipoOperacaoFinanceira.TipoOperacaoFinanceiraInvalidaException();
         }
